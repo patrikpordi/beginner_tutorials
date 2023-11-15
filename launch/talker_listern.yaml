@@ -1,0 +1,19 @@
+launch:
+
+- arg:
+    name: "talker_f"
+    default: "1.0"
+
+- node:
+    pkg: "cpp_pubsub"
+    exec: "talker"
+    name: "talker"
+    param:
+    -
+      name: "talker_f"
+      value: "$(var talker_f)"
+
+- node:
+    pkg: "cpp_pubsub"
+    exec: "listener"
+    name: "listener"

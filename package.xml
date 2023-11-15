@@ -7,13 +7,17 @@
   <maintainer email="ppordi@umd.edu">Patrik Pordi</maintainer>
   <license>Apache License 2.0</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+   <buildtool_depend>ament_cmake</buildtool_depend>
+  
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+  <exec_depend>rosidl_default_runtime</exec_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-
+  <exec_depend>ros2launch</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>

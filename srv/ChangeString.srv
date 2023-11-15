@@ -1,0 +1,4 @@
+# ChangeString.srv
+string new_string
+---
+bool success
