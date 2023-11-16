@@ -12,28 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * @file subscriber_member_function.cpp
+ * @author Patrik Dominik Pördi (ppordi@umd.edu)
+ * @brief 
+ * @version 0.1
+ * @date 2023-11-15
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include <functional>
 #include <memory>
 
-#include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/string.hpp>
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
 
 using std::placeholders::_1;
-
+/// @brief This class is used to subscribe to a topic and print the message
+/// The class inherits from the rclcpp::Node class
+/// The class has a subscription member function which subscribes to a topic
+/// and prints the message
 class MinimalSubscriber : public rclcpp::Node {
  public:
-  MinimalSubscriber() : Node("minimal_subscriber") {
+  MinimalSubscriber() : Node("custom_node_subscriber") {
+    // Create a subscription
     subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "topic", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+        "custom_topic", 10,
+        std::bind(&MinimalSubscriber::topic_callback, this, _1));
   }
 
  private:
+  /// @brief This function is used to print the message received from the
+  /// @param msg
   void topic_callback(const std_msgs::msg::String& msg) const {
-    RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.data.c_str());
+    RCLCPP_INFO(this->get_logger(), "The publisher said -> '%s'",
+                msg.data.c_str());
   }
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
 };
 
+/// @brief This function is used to create a subscriber node and spin it
+/// @param argc
+/// @param argv
+/// @return
 int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalSubscriber>());

@@ -3,7 +3,7 @@
 
 ## Overview
 
-This ROS 2 package, "cpp_pubsub," is a C++ example that demonstrates basic publisher and subscriber functionality in ROS 2 Humble. It showcases how to publish and subscribe to messages in a ROS 2 system.
+This ROS 2 package, "cpp_pubsub," is a C++ example that demonstrates basic publisher, subscriber and service functionality in ROS 2 Humble. It showcases how to publish and subscribe to messages in a ROS 2 system, and how to modify the published message using a service call.
 
 ## Prerequisites
 
@@ -21,16 +21,30 @@ To build the package, follow these steps:
 
    ```bash
    cd ~/ros2_ws/src
-   git clone https://github.com/patrikpordi/beginner_tutorials
+   git clone -b  ros_services_logging_launch  https://github.com/patrikpordi/beginner_tutorials.git
    colcon build --packages-select cpp_pubsub
    source ~/ros2_ws/install/setup.bash
 
    In another terminals run:
+   source ~/ros2_ws/install/setup.bash
    ros2 run cpp_pubsub talker
    ros2 run cpp_pubsub listener
+   OR
+   using launch file:
+   ros2 launch cpp_pubsub talker_listern.yaml => talker_f:= Frequancy 50.0 is a decent      option
+      ros2 launch cpp_pubsub talker_listern.yaml => talker_f:= 50.0
+
+
+   ros2 service call /change_string cpp_pubsub/srv/ChangeString "new_string: 'Update'"
+   OR
+   use rqt to call the service
+
 
 ## Results
 
-Can be found in cppcheck.txt and cpplint.txt
+Can be found results/
+   cppcheck.txt
+   cpplint.txt
+   rqt_console.png
 
 
