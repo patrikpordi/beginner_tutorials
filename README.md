@@ -30,7 +30,10 @@ To build the package, follow these steps:
    ros2 run cpp_pubsub talker
    ros2 run cpp_pubsub listener
    OR
-   ros2 launch cpp_pubsub talker_listern.yaml talker_f:=50.0
+   using launch file:
+   ros2 launch cpp_pubsub talker_listern.yaml => talker_f:= Frequancy 50.0 is a decent      option
+      ros2 launch cpp_pubsub talker_listern.yaml => talker_f:= 50.0
+
 
    ros2 service call /change_string cpp_pubsub/srv/ChangeString "new_string: 'Update'"
    OR
