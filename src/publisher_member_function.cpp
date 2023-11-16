@@ -1,5 +1,5 @@
-#include <chrono> // This code uses <chrono>, which is part of the C++11 standard.
-#include <functional>
+#include <chrono>  // NOLINT [build/c++11]
+#include <functional>  // This code uses <chrono>, which is part of the C++11 standard.
 #include <memory>
 #include <random>
 #include <string>
