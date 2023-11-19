@@ -14,6 +14,24 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
+
+find_package(rclcpp_action REQUIRED)
+
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+
+# set(THIS_PACKAGE_INCLUDE_DEPENDS
+#     rclcpp
+#     rclcpp_action
+#     std_msgs
+#     custom_interfaces
+#     geometry_msgs
+#     tf2
+#     tf2_ros
+# )
+
+
 set(srv_files
   "srv/ChangeString.srv"
 )
@@ -27,7 +45,7 @@ ament_export_dependencies(rosidl_default_runtime)
 
 
 add_executable(talker src/publisher_member_function.cpp)
-ament_target_dependencies(talker rclcpp std_msgs )
+ament_target_dependencies(talker rclcpp std_msgs geometry_msgs tf2 tf2_ros)
 
 add_executable(listener src/subscriber_member_function.cpp)
 ament_target_dependencies(listener rclcpp std_msgs )

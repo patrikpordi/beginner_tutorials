@@ -31,6 +31,9 @@
 #include "cpp_pubsub/srv/change_string.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
 
 // using namespace std::chrono_literals;
 using std::chrono_literals::operator""ms;
@@ -50,12 +53,20 @@ class MinimalPublisher : public rclcpp::Node {
     this->declare_parameter("talker_f", 1.0);
 
     auto frequency = this->get_parameter("talker_f");
+    // std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
+    tfb_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+    
+    update_step_.header.frame_id = "world";
+    update_step_.child_frame_id = "talk";
+    
+    
 
     if (frequency.get_type() == rclcpp::PARAMETER_NOT_SET) {
       RCLCPP_ERROR_STREAM(this->get_logger(),
                           "Time period Parameter not set");
       throw std::runtime_error("Time period Parameter not set");
     }
+
     // Create a publisher
     publisher_ =
         this->create_publisher<std_msgs::msg::String>("custom_topic", 10);
@@ -74,8 +85,41 @@ class MinimalPublisher : public rclcpp::Node {
   }
 
  private:
+  /// @brief This function is used to broadcast a transform
+  void broadcast_tf(){
+    
+    // update_step_.header.stamp = this->now();
+    // update_step_.transform.translation.x = 0.0;
+    // update_step_.transform.translation.y = 2.0;
+    // update_step_.transform.translation.z = 0.0;
+    // tf2::Quaternion q;
+    // q.setRPY(0, 0, 0);
+    // update_step_.transform.rotation.x = q.x();
+    // update_step_.transform.rotation.y = q.y();
+    // update_step_.transform.rotation.z = q.z();
+    // update_step_.transform.rotation.w = q.w();
+    // tfb_->sendTransform(update_step_);
+
+    update_step_.header.stamp = this->now();
+    update_step_.transform.translation.x =
+    update_step_.transform.translation.x + 1;
+    update_step_.transform.translation.y =
+    update_step_.transform.translation.y - 1;
+    update_step_.transform.translation.z =
+    update_step_.transform.translation.z + 5;
+    tf2::Quaternion q;
+    q.setRPY(0.785398, 0, 0.785398);
+    update_step_.transform.rotation.x = q.x();
+    update_step_.transform.rotation.y = q.y();
+    update_step_.transform.rotation.z = q.z();
+    update_step_.transform.rotation.w = q.w();
+    // Broadcast the transform
+    tfb_->sendTransform(update_step_);
+  }
   /// @brief This function is used to publish a string message to a topic
   void timer_callback() {
+    // Broadcast the transform
+    broadcast_tf();
     auto message = std_msgs::msg::String();
     unsigned int seed =
         std::chrono::system_clock::now().time_since_epoch().count();
@@ -94,12 +138,26 @@ class MinimalPublisher : public rclcpp::Node {
     msg_ = request->new_string;
     response->success = true;
     RCLCPP_INFO_STREAM(this->get_logger(), ("Changing the string to: " + msg_));
+  
+      // // skratch
+      // geometry_msgs::msg::TransformStamped update_step_;
+      // rclcpp::TimerBase::SharedPtr timer_;
+      // rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+      // rclcpp::Service<custom_interfaces::srv::ChangeString>::SharedPtr service_;
+      // std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
+      // std::string msg_;
+  
   }
+
+  
 
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
   rclcpp::Service<cpp_pubsub::srv::ChangeString>::SharedPtr service_;
   std::string msg_;
+  // tfb_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+  std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
+  geometry_msgs::msg::TransformStamped update_step_;
 };
 /// @brief  Main function for the publisher node
 /// @param argc
