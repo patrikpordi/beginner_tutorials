@@ -39,6 +39,46 @@ To build the package, follow these steps:
    OR
    use rqt to call the service
 
+   ----
+To bag all the topics during launch use
+```bash
+ros2 launch cpp_pubsub talker_listener_bagger.py 
+```
+OR
+```bash
+# To disable recording
+ros2 launch cpp_pubsub talker_listener_bagger.py talker_f:=10.0 record_enabled:='False'
+```
+OR
+```bash
+# To update the frequency of the talker and change the save location of the bag file
+ros2 launch cpp_pubsub talker_listener_bagger.py talker_f:=10.0 bag_file:='./src/cpp_pubsub/results/new_recording'
+```
+
+This will run the talker node and bag all the topics it publishes for 15sec
+> :warning: A new bag will not be created if a file with the same name already exists
+
+To replay the bag file along with a listener node run the following command
+```bash
+# This will play the bag file recorded in the results path 
+ros2 launch cpp_pubsub talker_listener_bagger.py replay_only:='True' bag_file:='./src/cpp_pubsub/results/new_recording'
+```
+Run the unit tests by running the command 
+```bash
+colcon test --packages-select cpp_pubsub
+cat log/latest_test/cpp_pubsub/stdout_stderr.log
+```
+
+## CppLint & CppCheck
+   ```bash
+   # Use the below command for cpp lint by moving to root directory of your workspace 
+   cpplint  --filter=-build/c++11,+build/c++17,-build/namespaces,-build/include_order $( find . -name *.cpp | grep -vE -e "^(./build/|./install/|./log/)" ) &> results/cpplint.txt
+
+   # Use the below command for cpp check by moving to root directory of your workspace
+   cppcheck --enable=all --std=c++17 --suppress=missingIncludeSystem $( find . -name *.cpp | grep -vE -e "^(./build/|./install/|./log/)" ) --check-config  &> results/cppcheck.txt
+```
+
+
 
 ## Results
 
@@ -46,5 +86,8 @@ Can be found results/
    cppcheck.txt
    cpplint.txt
    rqt_console.png
+   frames_2023-11-19_17.22.55.gv
+   frames_2023-11-19_17.22.55.pdf
+   new_recording
 
 

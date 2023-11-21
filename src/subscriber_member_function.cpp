@@ -15,18 +15,18 @@
 /**
  * @file subscriber_member_function.cpp
  * @author Patrik Dominik Pördi (ppordi@umd.edu)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-15
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <functional>
 #include <memory>
 
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
 
 using std::placeholders::_1;
 /// @brief This class is used to subscribe to a topic and print the message
