@@ -15,12 +15,12 @@
 /**
  * @file publisher_member_function.cpp
  * @author Patrik Dominik Pördi (ppordi@umd.edu)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-15
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <chrono>  // NOLINT [build/c++11]
 #include <functional>  // This code uses <chrono>, which is part of the C++11 standard.
@@ -29,9 +29,9 @@
 #include <string>
 
 #include "cpp_pubsub/srv/change_string.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2_ros/transform_broadcaster.h"
 
@@ -55,15 +55,12 @@ class MinimalPublisher : public rclcpp::Node {
     auto frequency = this->get_parameter("talker_f");
     // std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
     tfb_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
-    
+
     update_step_.header.frame_id = "world";
     update_step_.child_frame_id = "talk";
-    
-    
 
     if (frequency.get_type() == rclcpp::PARAMETER_NOT_SET) {
-      RCLCPP_ERROR_STREAM(this->get_logger(),
-                          "Time period Parameter not set");
+      RCLCPP_ERROR_STREAM(this->get_logger(), "Time period Parameter not set");
       throw std::runtime_error("Time period Parameter not set");
     }
 
@@ -86,8 +83,7 @@ class MinimalPublisher : public rclcpp::Node {
 
  private:
   /// @brief This function is used to broadcast a transform
-  void broadcast_tf(){
-    
+  void broadcast_tf() {
     // update_step_.header.stamp = this->now();
     // update_step_.transform.translation.x = 0.0;
     // update_step_.transform.translation.y = 2.0;
@@ -102,11 +98,11 @@ class MinimalPublisher : public rclcpp::Node {
 
     update_step_.header.stamp = this->now();
     update_step_.transform.translation.x =
-    update_step_.transform.translation.x + 1;
+        update_step_.transform.translation.x + 1;
     update_step_.transform.translation.y =
-    update_step_.transform.translation.y - 1;
+        update_step_.transform.translation.y - 1;
     update_step_.transform.translation.z =
-    update_step_.transform.translation.z + 5;
+        update_step_.transform.translation.z + 5;
     tf2::Quaternion q;
     q.setRPY(0.785398, 0, 0.785398);
     update_step_.transform.rotation.x = q.x();
@@ -138,18 +134,15 @@ class MinimalPublisher : public rclcpp::Node {
     msg_ = request->new_string;
     response->success = true;
     RCLCPP_INFO_STREAM(this->get_logger(), ("Changing the string to: " + msg_));
-  
-      // // skratch
-      // geometry_msgs::msg::TransformStamped update_step_;
-      // rclcpp::TimerBase::SharedPtr timer_;
-      // rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-      // rclcpp::Service<custom_interfaces::srv::ChangeString>::SharedPtr service_;
-      // std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
-      // std::string msg_;
-  
-  }
 
-  
+    // // skratch
+    // geometry_msgs::msg::TransformStamped update_step_;
+    // rclcpp::TimerBase::SharedPtr timer_;
+    // rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+    // rclcpp::Service<custom_interfaces::srv::ChangeString>::SharedPtr
+    // service_; std::unique_ptr<tf2_ros::TransformBroadcaster> tfb_;
+    // std::string msg_;
+  }
 
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
